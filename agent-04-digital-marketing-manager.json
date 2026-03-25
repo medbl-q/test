@@ -1,7 +1,6 @@
 {
   "name": "Agent 04 – Digital Marketing Manager (Central Orchestrator)",
   "nodes": [
-
     {
       "parameters": {
         "httpMethod": "POST",
@@ -14,10 +13,12 @@
       "name": "📥 Webhook – Approved Assets",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [0, 200],
+      "position": [
+        0,
+        200
+      ],
       "webhookId": "dmm-approved-assets"
     },
-
     {
       "parameters": {
         "rule": {
@@ -33,9 +34,11 @@
       "name": "⏰ Schedule Trigger – Daily 07:00",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 420]
+      "position": [
+        0,
+        420
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -78,9 +81,11 @@
       "name": "🏷️ Set – LAUNCH Context",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [240, 200]
+      "position": [
+        240,
+        200
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -111,9 +116,11 @@
       "name": "🏷️ Set – OPTIMIZE Context",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [240, 420]
+      "position": [
+        240,
+        420
+      ]
     },
-
     {
       "parameters": {
         "mode": "combine",
@@ -124,9 +131,11 @@
       "name": "🔀 Merge – Triggers",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [480, 300]
+      "position": [
+        480,
+        300
+      ]
     },
-
     {
       "parameters": {
         "url": "https://analyticsdata.googleapis.com/v1beta/properties/{{ $env.GA4_PROPERTY_ID }}:runReport",
@@ -142,7 +151,10 @@
       "name": "📊 GA4 – Pull Performance Data",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 100],
+      "position": [
+        720,
+        100
+      ],
       "credentials": {
         "googleAnalyticsOAuth2": {
           "id": "ga4-oauth2",
@@ -150,7 +162,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "url": "=https://googleads.googleapis.com/v17/customers/{{ $env.GOOGLE_ADS_CUSTOMER_ID }}/googleAds:search",
@@ -160,7 +171,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "developer-token", "value": "={{ $env.GOOGLE_ADS_DEVELOPER_TOKEN }}" }
+            {
+              "name": "developer-token",
+              "value": "={{ $env.GOOGLE_ADS_DEVELOPER_TOKEN }}"
+            }
           ]
         },
         "sendBody": true,
@@ -172,7 +186,10 @@
       "name": "🔍 Google Ads – Campaign Metrics",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 240],
+      "position": [
+        720,
+        240
+      ],
       "credentials": {
         "googleAdsOAuth2Api": {
           "id": "google-ads-oauth2",
@@ -180,7 +197,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "url": "https://graph.facebook.com/v20.0/act_{{ $env.META_ADS_ACCOUNT_ID }}/insights",
@@ -190,9 +206,18 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "fields", "value": "campaign_name,impressions,clicks,spend,actions,purchase_roas,ctr,cpm,cpp" },
-            { "name": "date_preset", "value": "yesterday" },
-            { "name": "level", "value": "campaign" }
+            {
+              "name": "fields",
+              "value": "campaign_name,impressions,clicks,spend,actions,purchase_roas,ctr,cpm,cpp"
+            },
+            {
+              "name": "date_preset",
+              "value": "yesterday"
+            },
+            {
+              "name": "level",
+              "value": "campaign"
+            }
           ]
         },
         "options": {}
@@ -201,7 +226,10 @@
       "name": "📘 Meta Ads – Campaign Insights",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 380],
+      "position": [
+        720,
+        380
+      ],
       "credentials": {
         "facebookGraphApi": {
           "id": "meta-graph-api",
@@ -209,7 +237,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "url": "https://api.hubapi.com/analytics/v2/reports/campaigns",
@@ -219,8 +246,14 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "startDate", "value": "={{ DateTime.now().minus({days:1}).toISODate() }}" },
-            { "name": "endDate", "value": "={{ DateTime.now().toISODate() }}" }
+            {
+              "name": "startDate",
+              "value": "={{ DateTime.now().minus({days:1}).toISODate() }}"
+            },
+            {
+              "name": "endDate",
+              "value": "={{ DateTime.now().toISODate() }}"
+            }
           ]
         },
         "options": {}
@@ -229,7 +262,10 @@
       "name": "🟠 HubSpot – Email & CRM Analytics",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 520],
+      "position": [
+        720,
+        520
+      ],
       "credentials": {
         "hubspotPrivateAppApi": {
           "id": "hubspot-private-app",
@@ -237,7 +273,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "url": "https://api.airtable.com/v0/{{ $env.AIRTABLE_BASE_ID }}/Campaign_Performance",
@@ -247,8 +282,14 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "filterByFormula", "value": "IS_SAME({Date}, TODAY(), 'day')" },
-            { "name": "maxRecords", "value": "100" }
+            {
+              "name": "filterByFormula",
+              "value": "IS_SAME({Date}, TODAY(), 'day')"
+            },
+            {
+              "name": "maxRecords",
+              "value": "100"
+            }
           ]
         },
         "options": {}
@@ -257,7 +298,10 @@
       "name": "🗃️ Airtable – Performance Records",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [720, 660],
+      "position": [
+        720,
+        660
+      ],
       "credentials": {
         "airtableTokenApi": {
           "id": "airtable-token",
@@ -265,7 +309,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "mode": "combine",
@@ -276,14 +319,29 @@
       "name": "🔀 Merge – All Performance Data",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [960, 380]
+      "position": [
+        960,
+        380
+      ]
     },
-
+    {
+      "parameters": {
+        "jsCode": "// Build the AI Agent prompt based on the current execution mode\nconst mergeData = $input.first().json;\nconst triggerData = $('🔀 Merge – Triggers').first().json;\nconst mode = triggerData.mode ?? 'launch';\n\nlet prompt = '';\n\nif (mode === 'launch') {\n  const campaignId   = triggerData.campaign_id ?? 'UNKNOWN';\n  const assets       = triggerData.approved_assets ?? [];\n  const strategy     = triggerData.campaign_strategy ?? {};\n  const budgets      = triggerData.channel_budgets ?? {};\n\n  prompt = `You are operating in **LAUNCH MODE**.\n\n## LAUNCH MODE\n\nYou have received approved production assets from upstream agents. Build a full channel execution plan.\n\n**Campaign ID:** ${campaignId}\n\n**Approved Assets:**\n${JSON.stringify(assets, null, 2)}\n\n**Campaign Strategy:**\n${JSON.stringify(strategy, null, 2)}\n\n**Channel Budgets:**\n${JSON.stringify(budgets, null, 2)}\n\nProduce a JSON launch plan in exactly this format:\n{\n  \"mode\": \"launch\",\n  \"campaign_id\": \"string\",\n  \"channel_plans\": [{\n    \"channel\": \"paid_social | paid_search | email | seo | social_organic | video\",\n    \"agent\": \"ppc | email | seo | social | google | video\",\n    \"assets\": [\"array of asset IDs\"],\n    \"audience_targeting\": \"string\",\n    \"budget\": \"string\",\n    \"objective\": \"string\",\n    \"kpi\": \"string\",\n    \"launch_date\": \"string\"\n  }],\n  \"test_framework\": [{ \"variable\": \"string\", \"hypothesis\": \"string\", \"metric\": \"string\", \"minimum_sample\": \"string\" }],\n  \"tracking\": { \"utm_structure\": \"string\", \"conversion_events\": [\"array\"], \"attribution_model\": \"string\" },\n  \"status\": \"launch_plan_complete\"\n}`;\n\n} else {\n  const ga4Data      = mergeData.ga4       ?? {};\n  const googleAds    = mergeData.google_ads ?? {};\n  const metaAds      = mergeData.meta_ads  ?? {};\n  const hubspot      = mergeData.hubspot   ?? {};\n  const airtable     = mergeData.airtable  ?? {};\n\n  prompt = `You are operating in **OPTIMIZE MODE**.\n\n## OPTIMIZE MODE\n\nYou have received aggregated performance data from all active channels. Analyse it and produce optimization signals.\n\n**GA4 Data:**\n${JSON.stringify(ga4Data, null, 2)}\n\n**Google Ads Data:**\n${JSON.stringify(googleAds, null, 2)}\n\n**Meta Ads Data:**\n${JSON.stringify(metaAds, null, 2)}\n\n**HubSpot Email Data:**\n${JSON.stringify(hubspot, null, 2)}\n\n**Airtable Records:**\n${JSON.stringify(airtable, null, 2)}\n\nProduce a JSON optimization plan in exactly this format:\n{\n  \"mode\": \"optimize\",\n  \"performance_summary\": { \"overall_vs_kpi\": \"string\", \"top_performer\": \"string\", \"underperformer\": \"string\" },\n  \"optimization_actions\": [{ \"channel\": \"string\", \"action\": \"string\", \"rationale\": \"string\", \"data_point\": \"string\" }],\n  \"signals_to_agents\": {\n    \"to_creative_director\": \"string | null\",\n    \"to_content_manager\": \"string | null\",\n    \"to_ppc\": \"string | null\",\n    \"to_email\": \"string | null\",\n    \"to_social\": \"string | null\"\n  },\n  \"creative_refresh_required\": true,\n  \"strategy_loop_back\": \"string | null\",\n  \"status\": \"optimization_complete\"\n}`;\n}\n\nreturn [{ json: { prompt, mode } }];"
+      },
+      "id": "code-build-prompt",
+      "name": "⚙️ Code – Build Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1080,
+        380
+      ]
+    },
     {
       "parameters": {
         "agent": "conversationalAgent",
         "promptType": "define",
-        "text": "=You are operating in **{{ $('🔀 Merge – Triggers').first().json.mode?.toUpperCase() ?? 'LAUNCH' }} MODE**.\n\n{% if $('🔀 Merge – Triggers').first().json.mode === 'launch' %}\n## LAUNCH MODE\n\nYou have received approved production assets from upstream agents. Build a full channel execution plan.\n\n**Campaign ID:** {{ $('🔀 Merge – Triggers').first().json.campaign_id }}\n\n**Approved Assets:**\n{{ $('🔀 Merge – Triggers').first().json.approved_assets }}\n\n**Campaign Strategy:**\n{{ $('🔀 Merge – Triggers').first().json.campaign_strategy }}\n\n**Channel Budgets:**\n{{ $('🔀 Merge – Triggers').first().json.channel_budgets }}\n\nProduce a JSON launch plan in exactly this format:\n{\n  \"mode\": \"launch\",\n  \"campaign_id\": \"string\",\n  \"channel_plans\": [{\n    \"channel\": \"paid_social | paid_search | email | seo | social_organic | video\",\n    \"agent\": \"ppc | email | seo | social | google | video\",\n    \"assets\": [\"array of asset IDs\"],\n    \"audience_targeting\": \"string\",\n    \"budget\": \"string\",\n    \"objective\": \"string\",\n    \"kpi\": \"string\",\n    \"launch_date\": \"string\"\n  }],\n  \"test_framework\": [{ \"variable\": \"string\", \"hypothesis\": \"string\", \"metric\": \"string\", \"minimum_sample\": \"string\" }],\n  \"tracking\": { \"utm_structure\": \"string\", \"conversion_events\": [\"array\"], \"attribution_model\": \"string\" },\n  \"status\": \"launch_plan_complete\"\n}\n\n{% else %}\n## OPTIMIZE MODE\n\nYou have received aggregated performance data from all active channels. Analyse it and produce optimization signals.\n\n**GA4 Data:**\n{{ JSON.stringify($('🔀 Merge – All Performance Data').first().json.ga4 ?? {}) }}\n\n**Google Ads Data:**\n{{ JSON.stringify($('🔀 Merge – All Performance Data').first().json.google_ads ?? {}) }}\n\n**Meta Ads Data:**\n{{ JSON.stringify($('🔀 Merge – All Performance Data').first().json.meta_ads ?? {}) }}\n\n**HubSpot Email Data:**\n{{ JSON.stringify($('🔀 Merge – All Performance Data').first().json.hubspot ?? {}) }}\n\n**Airtable Records:**\n{{ JSON.stringify($('🔀 Merge – All Performance Data').first().json.airtable ?? {}) }}\n\nProduce a JSON optimization plan in exactly this format:\n{\n  \"mode\": \"optimize\",\n  \"performance_summary\": { \"overall_vs_kpi\": \"string\", \"top_performer\": \"string\", \"underperformer\": \"string\" },\n  \"optimization_actions\": [{ \"channel\": \"string\", \"action\": \"string\", \"rationale\": \"string\", \"data_point\": \"string\" }],\n  \"signals_to_agents\": {\n    \"to_creative_director\": \"string | null\",\n    \"to_content_manager\": \"string | null\",\n    \"to_ppc\": \"string | null\",\n    \"to_email\": \"string | null\",\n    \"to_social\": \"string | null\"\n  },\n  \"creative_refresh_required\": true | false,\n  \"strategy_loop_back\": \"string | null\",\n  \"status\": \"optimization_complete\"\n}\n{% endif %}",
+        "text": "={{ $json.prompt }}",
         "options": {
           "systemMessage": "You are a Digital Marketing Manager AI agent — the central orchestration node of a full-stack marketing agency automation system.\n\nYou operate in two modes: LAUNCH and OPTIMIZE.\n\n## LAUNCH mode\nWhen triggered by approved production assets arriving from upstream agents (Creative Director, Design Director):\n- Build a precise, channel-by-channel execution plan\n- Assign each asset to the correct distribution agent (PPC, Email, Social, Google/SEO, Video)\n- Define audience targeting, budgets, objectives, and KPIs per channel\n- Set up A/B test frameworks with clear hypotheses and minimum sample sizes\n- Specify UTM structures, conversion events, and attribution models\n- Never launch a campaign without defined KPIs and tracking in place\n\n## OPTIMIZE mode\nWhen triggered by the daily Schedule Trigger:\n- Analyse aggregated performance data from GA4, Google Ads, Meta Ads, HubSpot, and Airtable\n- Identify top performers and underperformers with specific data points\n- Generate concrete optimization actions — every action must cite a specific data point (no opinions)\n- Send targeted signals to upstream agents (Creative Director, Content Manager) and distribution agents (PPC, Email, Social)\n- Never end a test before minimum_sample is reached\n- If ROAS drops below target threshold: set creative_refresh_required: true and prepare notification for Design Director\n- Identify strategic pivots and send strategy_loop_back signals to the Strategist when needed\n\n## Output rules\n- Always output valid, parseable JSON in the specified schema\n- Every optimization action must include: channel, action, rationale, data_point\n- Include creative_refresh_required field in every OPTIMIZE output\n- Do not hallucinate data — work only with the data provided in the prompt"
         }
@@ -292,9 +350,11 @@
       "name": "🤖 AI Agent – Digital Marketing Manager",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
-      "position": [1200, 380]
+      "position": [
+        1200,
+        380
+      ]
     },
-
     {
       "parameters": {
         "model": "gpt-4o",
@@ -308,7 +368,10 @@
       "name": "🧠 OpenAI GPT-4o",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
-      "position": [1200, 600],
+      "position": [
+        1200,
+        600
+      ],
       "credentials": {
         "openAiApi": {
           "id": "openai-api-key",
@@ -316,7 +379,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "jsCode": "// Parse the AI agent's JSON output\nconst raw = $input.first().json.output;\nlet parsed;\ntry {\n  // Strip markdown code fences if present\n  const cleaned = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n  parsed = JSON.parse(cleaned);\n} catch (e) {\n  parsed = { mode: 'unknown', error: 'Failed to parse AI output', raw };\n}\n\nreturn [{ json: parsed }];"
@@ -325,9 +387,11 @@
       "name": "⚙️ Parse AI Agent Output",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1440, 380]
+      "position": [
+        1440,
+        380
+      ]
     },
-
     {
       "parameters": {
         "rules": {
@@ -335,12 +399,19 @@
             {
               "outputKey": "launch",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "strict" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.mode }}",
                     "rightValue": "launch",
-                    "operator": { "type": "string", "operation": "equals" }
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -349,12 +420,19 @@
             {
               "outputKey": "optimize",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "strict" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.mode }}",
                     "rightValue": "optimize",
-                    "operator": { "type": "string", "operation": "equals" }
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -368,9 +446,11 @@
       "name": "🔀 Router – LAUNCH vs OPTIMIZE",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [1680, 380]
+      "position": [
+        1680,
+        380
+      ]
     },
-
     {
       "parameters": {
         "rules": {
@@ -378,12 +458,19 @@
             {
               "outputKey": "ppc",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.channel_plans.some(p => p.agent === 'ppc') }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -392,12 +479,19 @@
             {
               "outputKey": "email",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.channel_plans.some(p => p.agent === 'email') }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -406,12 +500,19 @@
             {
               "outputKey": "social",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.channel_plans.some(p => p.agent === 'social') }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -420,12 +521,19 @@
             {
               "outputKey": "google",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.channel_plans.some(p => p.agent === 'google' || p.agent === 'seo') }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -434,12 +542,19 @@
             {
               "outputKey": "video",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.channel_plans.some(p => p.agent === 'video') }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -453,9 +568,11 @@
       "name": "📡 Router – Channel Distribution",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [1920, 200]
+      "position": [
+        1920,
+        200
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -498,9 +615,11 @@
       "name": "🚀 Launch – PPC Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 60]
+      "position": [
+        2160,
+        60
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -543,9 +662,11 @@
       "name": "🚀 Launch – Email Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 200]
+      "position": [
+        2160,
+        200
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -588,9 +709,11 @@
       "name": "🚀 Launch – Social Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 340]
+      "position": [
+        2160,
+        340
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -633,9 +756,11 @@
       "name": "🚀 Launch – Google / SEO Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 480]
+      "position": [
+        2160,
+        480
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -678,9 +803,11 @@
       "name": "🚀 Launch – Video Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 620]
+      "position": [
+        2160,
+        620
+      ]
     },
-
     {
       "parameters": {
         "mode": "combine",
@@ -691,14 +818,24 @@
       "name": "🔀 Merge – Launch Results",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [2400, 340]
+      "position": [
+        2400,
+        340
+      ]
     },
-
     {
       "parameters": {
         "operation": "append",
-        "documentId": { "value": "={{ $env.GOOGLE_SHEETS_SPREADSHEET_ID }}", "__rl": true, "mode": "id" },
-        "sheetName": { "value": "Campaign_Launch_Log", "__rl": true, "mode": "name" },
+        "documentId": {
+          "value": "={{ $env.GOOGLE_SHEETS_SPREADSHEET_ID }}",
+          "__rl": true,
+          "mode": "id"
+        },
+        "sheetName": {
+          "value": "Campaign_Launch_Log",
+          "__rl": true,
+          "mode": "name"
+        },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
@@ -711,13 +848,69 @@
             "Attribution_Model": "={{ $('⚙️ Parse AI Agent Output').first().json.tracking?.attribution_model }}"
           },
           "schema": [
-            { "id": "Campaign_ID", "displayName": "Campaign_ID", "required": false, "defaultMatch": false, "canBeUsedToMatch": true, "display": true, "type": "string" },
-            { "id": "Mode", "displayName": "Mode", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Timestamp", "displayName": "Timestamp", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Channels_Launched", "displayName": "Channels_Launched", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Status", "displayName": "Status", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "UTM_Structure", "displayName": "UTM_Structure", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Attribution_Model", "displayName": "Attribution_Model", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" }
+            {
+              "id": "Campaign_ID",
+              "displayName": "Campaign_ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Mode",
+              "displayName": "Mode",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Channels_Launched",
+              "displayName": "Channels_Launched",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "UTM_Structure",
+              "displayName": "UTM_Structure",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Attribution_Model",
+              "displayName": "Attribution_Model",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            }
           ]
         },
         "options": {}
@@ -726,7 +919,10 @@
       "name": "📋 Google Sheets – Log Launch",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [2640, 200],
+      "position": [
+        2640,
+        200
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "google-sheets-oauth2",
@@ -734,11 +930,14 @@
         }
       }
     },
-
     {
       "parameters": {
         "select": "channel",
-        "channelId": { "value": "={{ $env.SLACK_CHANNEL_CAMPAIGNS }}", "__rl": true, "mode": "id" },
+        "channelId": {
+          "value": "={{ $env.SLACK_CHANNEL_CAMPAIGNS }}",
+          "__rl": true,
+          "mode": "id"
+        },
         "text": "=🚀 *Campaign Launched* | Campaign ID: `{{ $('⚙️ Parse AI Agent Output').first().json.campaign_id }}`\n\n*Channels activated:*\n{{ ($('⚙️ Parse AI Agent Output').first().json.channel_plans ?? []).map(p => `• ${p.channel.toUpperCase()} → Agent: ${p.agent} | Budget: ${p.budget} | KPI: ${p.kpi} | Launch: ${p.launch_date}`).join('\\n') }}\n\n*A/B Tests:*\n{{ ($('⚙️ Parse AI Agent Output').first().json.test_framework ?? []).map(t => `• ${t.variable}: ${t.hypothesis} (min sample: ${t.minimum_sample})`).join('\\n') }}\n\n*Attribution:* {{ $('⚙️ Parse AI Agent Output').first().json.tracking?.attribution_model }}\n*Status:* ✅ {{ $('⚙️ Parse AI Agent Output').first().json.status }}",
         "otherOptions": {
           "mrkdwn": true
@@ -748,7 +947,10 @@
       "name": "💬 Slack – Launch Notification",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [2640, 340],
+      "position": [
+        2640,
+        340
+      ],
       "credentials": {
         "slackApi": {
           "id": "slack-api-token",
@@ -756,7 +958,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "rules": {
@@ -764,12 +965,19 @@
             {
               "outputKey": "to_creative_director",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.signals_to_agents?.to_creative_director !== null && $json.signals_to_agents?.to_creative_director !== undefined }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -778,12 +986,19 @@
             {
               "outputKey": "to_content_manager",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.signals_to_agents?.to_content_manager !== null && $json.signals_to_agents?.to_content_manager !== undefined }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -792,12 +1007,19 @@
             {
               "outputKey": "to_ppc",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.signals_to_agents?.to_ppc !== null && $json.signals_to_agents?.to_ppc !== undefined }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -806,12 +1028,19 @@
             {
               "outputKey": "to_email",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.signals_to_agents?.to_email !== null && $json.signals_to_agents?.to_email !== undefined }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -820,12 +1049,19 @@
             {
               "outputKey": "to_social",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "loose" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.signals_to_agents?.to_social !== null && $json.signals_to_agents?.to_social !== undefined }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -834,12 +1070,19 @@
             {
               "outputKey": "creative_refresh",
               "conditions": {
-                "options": { "caseSensitive": false, "leftValue": "", "typeValidation": "strict" },
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
                 "conditions": [
                   {
                     "leftValue": "={{ $json.creative_refresh_required }}",
                     "rightValue": true,
-                    "operator": { "type": "boolean", "operation": "true" }
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -853,9 +1096,11 @@
       "name": "📡 Router – Optimization Signals",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [1920, 560]
+      "position": [
+        1920,
+        560
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -886,9 +1131,11 @@
       "name": "📤 Signal → Creative Director",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 420]
+      "position": [
+        2160,
+        420
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -919,9 +1166,11 @@
       "name": "📤 Signal → Content Manager",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 560]
+      "position": [
+        2160,
+        560
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -952,9 +1201,11 @@
       "name": "📤 Signal → PPC Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 700]
+      "position": [
+        2160,
+        700
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -985,9 +1236,11 @@
       "name": "📤 Signal → Email Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 840]
+      "position": [
+        2160,
+        840
+      ]
     },
-
     {
       "parameters": {
         "assignments": {
@@ -1018,13 +1271,19 @@
       "name": "📤 Signal → Social Agent",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [2160, 980]
+      "position": [
+        2160,
+        980
+      ]
     },
-
     {
       "parameters": {
         "select": "channel",
-        "channelId": { "value": "={{ $env.SLACK_CHANNEL_DESIGN_DIRECTOR }}", "__rl": true, "mode": "id" },
+        "channelId": {
+          "value": "={{ $env.SLACK_CHANNEL_DESIGN_DIRECTOR }}",
+          "__rl": true,
+          "mode": "id"
+        },
         "text": "=🚨 *CREATIVE REFRESH REQUIRED* | ROAS has dropped below target threshold.\n\n*Performance Summary:*\n{{ $('⚙️ Parse AI Agent Output').first().json.performance_summary?.overall_vs_kpi }}\n\n*Underperformer:* {{ $('⚙️ Parse AI Agent Output').first().json.performance_summary?.underperformer }}\n\n*Recommended Actions:*\n{{ ($('⚙️ Parse AI Agent Output').first().json.optimization_actions ?? []).map(a => `• [${a.channel.toUpperCase()}] ${a.action} | Data: ${a.data_point}`).join('\\n') }}\n\n*Signal to Creative Director:*\n{{ $('⚙️ Parse AI Agent Output').first().json.signals_to_agents?.to_creative_director }}\n\nPlease brief the Creative Director and MARKETING DESIGNER to refresh creative assets immediately.",
         "otherOptions": {
           "mrkdwn": true
@@ -1034,7 +1293,10 @@
       "name": "🚨 Slack – Creative Refresh Alert",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [2160, 1120],
+      "position": [
+        2160,
+        1120
+      ],
       "credentials": {
         "slackApi": {
           "id": "slack-api-token",
@@ -1042,12 +1304,19 @@
         }
       }
     },
-
     {
       "parameters": {
         "operation": "append",
-        "documentId": { "value": "={{ $env.GOOGLE_SHEETS_SPREADSHEET_ID }}", "__rl": true, "mode": "id" },
-        "sheetName": { "value": "Performance_Reports", "__rl": true, "mode": "name" },
+        "documentId": {
+          "value": "={{ $env.GOOGLE_SHEETS_SPREADSHEET_ID }}",
+          "__rl": true,
+          "mode": "id"
+        },
+        "sheetName": {
+          "value": "Performance_Reports",
+          "__rl": true,
+          "mode": "name"
+        },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
@@ -1062,15 +1331,87 @@
             "Status": "={{ $json.status }}"
           },
           "schema": [
-            { "id": "Date", "displayName": "Date", "required": false, "defaultMatch": false, "canBeUsedToMatch": true, "display": true, "type": "string" },
-            { "id": "Mode", "displayName": "Mode", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Overall_vs_KPI", "displayName": "Overall_vs_KPI", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Top_Performer", "displayName": "Top_Performer", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Underperformer", "displayName": "Underperformer", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Optimization_Actions_Count", "displayName": "Optimization_Actions_Count", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "number" },
-            { "id": "Creative_Refresh_Required", "displayName": "Creative_Refresh_Required", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Strategy_Loop_Back", "displayName": "Strategy_Loop_Back", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" },
-            { "id": "Status", "displayName": "Status", "required": false, "defaultMatch": false, "canBeUsedToMatch": false, "display": true, "type": "string" }
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Mode",
+              "displayName": "Mode",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Overall_vs_KPI",
+              "displayName": "Overall_vs_KPI",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Top_Performer",
+              "displayName": "Top_Performer",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Underperformer",
+              "displayName": "Underperformer",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Optimization_Actions_Count",
+              "displayName": "Optimization_Actions_Count",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "number"
+            },
+            {
+              "id": "Creative_Refresh_Required",
+              "displayName": "Creative_Refresh_Required",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Strategy_Loop_Back",
+              "displayName": "Strategy_Loop_Back",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": false,
+              "display": true,
+              "type": "string"
+            }
           ]
         },
         "options": {}
@@ -1079,7 +1420,10 @@
       "name": "📋 Google Sheets – Performance Report",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [2640, 560],
+      "position": [
+        2640,
+        560
+      ],
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "google-sheets-oauth2",
@@ -1087,11 +1431,14 @@
         }
       }
     },
-
     {
       "parameters": {
         "select": "channel",
-        "channelId": { "value": "={{ $env.SLACK_CHANNEL_CAMPAIGNS }}", "__rl": true, "mode": "id" },
+        "channelId": {
+          "value": "={{ $env.SLACK_CHANNEL_CAMPAIGNS }}",
+          "__rl": true,
+          "mode": "id"
+        },
         "text": "=📊 *Daily Performance Report* | {{ $now.toISODate() }}\n\n*Overall vs KPI:* {{ $('⚙️ Parse AI Agent Output').first().json.performance_summary?.overall_vs_kpi }}\n🏆 *Top Performer:* {{ $('⚙️ Parse AI Agent Output').first().json.performance_summary?.top_performer }}\n⚠️ *Underperformer:* {{ $('⚙️ Parse AI Agent Output').first().json.performance_summary?.underperformer }}\n\n*Optimization Actions Taken:*\n{{ ($('⚙️ Parse AI Agent Output').first().json.optimization_actions ?? []).map(a => `• [${a.channel.toUpperCase()}] ${a.action}\\n  _Rationale: ${a.rationale}_ | Data: `${a.data_point}``).join('\\n') }}\n\n*Signals Sent:*\n{{ Object.entries($('⚙️ Parse AI Agent Output').first().json.signals_to_agents ?? {}).filter(([k,v]) => v).map(([k,v]) => `• ${k}: ${v}`).join('\\n') }}\n\n*Creative Refresh Required:* {{ $('⚙️ Parse AI Agent Output').first().json.creative_refresh_required ? '🚨 YES' : '✅ No' }}\n*Status:* {{ $('⚙️ Parse AI Agent Output').first().json.status }}",
         "otherOptions": {
           "mrkdwn": true
@@ -1101,7 +1448,10 @@
       "name": "💬 Slack – Daily Optimization Report",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [2640, 700],
+      "position": [
+        2640,
+        700
+      ],
       "credentials": {
         "slackApi": {
           "id": "slack-api-token",
@@ -1109,7 +1459,6 @@
         }
       }
     },
-
     {
       "parameters": {
         "respondWith": "json",
@@ -1119,183 +1468,450 @@
       "name": "✅ Webhook Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [2880, 200]
+      "position": [
+        2880,
+        200
+      ]
     }
-
   ],
-
   "connections": {
     "📥 Webhook – Approved Assets": {
       "main": [
-        [{ "node": "🏷️ Set – LAUNCH Context", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🏷️ Set – LAUNCH Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "⏰ Schedule Trigger – Daily 07:00": {
       "main": [
-        [{ "node": "🏷️ Set – OPTIMIZE Context", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🏷️ Set – OPTIMIZE Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🏷️ Set – LAUNCH Context": {
       "main": [
-        [{ "node": "🔀 Merge – Triggers", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🔀 Merge – Triggers",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🏷️ Set – OPTIMIZE Context": {
       "main": [
-        [{ "node": "🔀 Merge – Triggers", "type": "main", "index": 1 }]
+        [
+          {
+            "node": "🔀 Merge – Triggers",
+            "type": "main",
+            "index": 1
+          }
+        ]
       ]
     },
     "🔀 Merge – Triggers": {
       "main": [
         [
-          { "node": "📊 GA4 – Pull Performance Data", "type": "main", "index": 0 },
-          { "node": "🔍 Google Ads – Campaign Metrics", "type": "main", "index": 0 },
-          { "node": "📘 Meta Ads – Campaign Insights", "type": "main", "index": 0 },
-          { "node": "🟠 HubSpot – Email & CRM Analytics", "type": "main", "index": 0 },
-          { "node": "🗃️ Airtable – Performance Records", "type": "main", "index": 0 }
+          {
+            "node": "📊 GA4 – Pull Performance Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🔍 Google Ads – Campaign Metrics",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "📘 Meta Ads – Campaign Insights",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🟠 HubSpot – Email & CRM Analytics",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "🗃️ Airtable – Performance Records",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "📊 GA4 – Pull Performance Data": {
       "main": [
-        [{ "node": "🔀 Merge – All Performance Data", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🔀 Merge – All Performance Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🔍 Google Ads – Campaign Metrics": {
       "main": [
-        [{ "node": "🔀 Merge – All Performance Data", "type": "main", "index": 1 }]
+        [
+          {
+            "node": "🔀 Merge – All Performance Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
       ]
     },
     "📘 Meta Ads – Campaign Insights": {
       "main": [
-        [{ "node": "🔀 Merge – All Performance Data", "type": "main", "index": 2 }]
+        [
+          {
+            "node": "🔀 Merge – All Performance Data",
+            "type": "main",
+            "index": 2
+          }
+        ]
       ]
     },
     "🟠 HubSpot – Email & CRM Analytics": {
       "main": [
-        [{ "node": "🔀 Merge – All Performance Data", "type": "main", "index": 3 }]
+        [
+          {
+            "node": "🔀 Merge – All Performance Data",
+            "type": "main",
+            "index": 3
+          }
+        ]
       ]
     },
     "🗃️ Airtable – Performance Records": {
       "main": [
-        [{ "node": "🔀 Merge – All Performance Data", "type": "main", "index": 4 }]
+        [
+          {
+            "node": "🔀 Merge – All Performance Data",
+            "type": "main",
+            "index": 4
+          }
+        ]
       ]
     },
     "🔀 Merge – All Performance Data": {
       "main": [
-        [{ "node": "🤖 AI Agent – Digital Marketing Manager", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "⚙️ Code – Build Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🧠 OpenAI GPT-4o": {
       "ai_languageModel": [
-        [{ "node": "🤖 AI Agent – Digital Marketing Manager", "type": "ai_languageModel", "index": 0 }]
+        [
+          {
+            "node": "🤖 AI Agent – Digital Marketing Manager",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
       ]
     },
     "🤖 AI Agent – Digital Marketing Manager": {
       "main": [
-        [{ "node": "⚙️ Parse AI Agent Output", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "⚙️ Parse AI Agent Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "⚙️ Parse AI Agent Output": {
       "main": [
-        [{ "node": "🔀 Router – LAUNCH vs OPTIMIZE", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🔀 Router – LAUNCH vs OPTIMIZE",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🔀 Router – LAUNCH vs OPTIMIZE": {
       "main": [
-        [{ "node": "📡 Router – Channel Distribution", "type": "main", "index": 0 }],
-        [{ "node": "📡 Router – Optimization Signals", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📡 Router – Channel Distribution",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📡 Router – Optimization Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📡 Router – Channel Distribution": {
       "main": [
-        [{ "node": "🚀 Launch – PPC Agent", "type": "main", "index": 0 }],
-        [{ "node": "🚀 Launch – Email Agent", "type": "main", "index": 0 }],
-        [{ "node": "🚀 Launch – Social Agent", "type": "main", "index": 0 }],
-        [{ "node": "🚀 Launch – Google / SEO Agent", "type": "main", "index": 0 }],
-        [{ "node": "🚀 Launch – Video Agent", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🚀 Launch – PPC Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚀 Launch – Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚀 Launch – Social Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚀 Launch – Google / SEO Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚀 Launch – Video Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🚀 Launch – PPC Agent": {
       "main": [
-        [{ "node": "🔀 Merge – Launch Results", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "🔀 Merge – Launch Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "🚀 Launch – Email Agent": {
       "main": [
-        [{ "node": "🔀 Merge – Launch Results", "type": "main", "index": 1 }]
+        [
+          {
+            "node": "🔀 Merge – Launch Results",
+            "type": "main",
+            "index": 1
+          }
+        ]
       ]
     },
     "🚀 Launch – Social Agent": {
       "main": [
-        [{ "node": "🔀 Merge – Launch Results", "type": "main", "index": 2 }]
+        [
+          {
+            "node": "🔀 Merge – Launch Results",
+            "type": "main",
+            "index": 2
+          }
+        ]
       ]
     },
     "🚀 Launch – Google / SEO Agent": {
       "main": [
-        [{ "node": "🔀 Merge – Launch Results", "type": "main", "index": 3 }]
+        [
+          {
+            "node": "🔀 Merge – Launch Results",
+            "type": "main",
+            "index": 3
+          }
+        ]
       ]
     },
     "🚀 Launch – Video Agent": {
       "main": [
-        [{ "node": "🔀 Merge – Launch Results", "type": "main", "index": 4 }]
+        [
+          {
+            "node": "🔀 Merge – Launch Results",
+            "type": "main",
+            "index": 4
+          }
+        ]
       ]
     },
     "🔀 Merge – Launch Results": {
       "main": [
         [
-          { "node": "📋 Google Sheets – Log Launch", "type": "main", "index": 0 },
-          { "node": "💬 Slack – Launch Notification", "type": "main", "index": 0 }
+          {
+            "node": "📋 Google Sheets – Log Launch",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "💬 Slack – Launch Notification",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "📋 Google Sheets – Log Launch": {
       "main": [
-        [{ "node": "✅ Webhook Response", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "✅ Webhook Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📡 Router – Optimization Signals": {
       "main": [
-        [{ "node": "📤 Signal → Creative Director", "type": "main", "index": 0 }],
-        [{ "node": "📤 Signal → Content Manager", "type": "main", "index": 0 }],
-        [{ "node": "📤 Signal → PPC Agent", "type": "main", "index": 0 }],
-        [{ "node": "📤 Signal → Email Agent", "type": "main", "index": 0 }],
-        [{ "node": "📤 Signal → Social Agent", "type": "main", "index": 0 }],
-        [{ "node": "🚨 Slack – Creative Refresh Alert", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📤 Signal → Creative Director",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📤 Signal → Content Manager",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📤 Signal → PPC Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📤 Signal → Email Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "📤 Signal → Social Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "🚨 Slack – Creative Refresh Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📤 Signal → Creative Director": {
       "main": [
-        [{ "node": "📋 Google Sheets – Performance Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📋 Google Sheets – Performance Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📤 Signal → Content Manager": {
       "main": [
-        [{ "node": "📋 Google Sheets – Performance Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📋 Google Sheets – Performance Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📤 Signal → PPC Agent": {
       "main": [
-        [{ "node": "📋 Google Sheets – Performance Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📋 Google Sheets – Performance Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📤 Signal → Email Agent": {
       "main": [
-        [{ "node": "📋 Google Sheets – Performance Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📋 Google Sheets – Performance Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📤 Signal → Social Agent": {
       "main": [
-        [{ "node": "📋 Google Sheets – Performance Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "📋 Google Sheets – Performance Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "📋 Google Sheets – Performance Report": {
       "main": [
-        [{ "node": "💬 Slack – Daily Optimization Report", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "💬 Slack – Daily Optimization Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Code – Build Prompt": {
+      "main": [
+        [
+          {
+            "node": "🤖 AI Agent – Digital Marketing Manager",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
-
   "pinData": {},
   "settings": {
     "executionOrder": "v1",
@@ -1305,11 +1921,26 @@
   },
   "staticData": null,
   "tags": [
-    { "name": "marketing", "createdAt": "2026-03-25T21:00:00.000Z" },
-    { "name": "ai-agents", "createdAt": "2026-03-25T21:00:00.000Z" },
-    { "name": "automation", "createdAt": "2026-03-25T21:00:00.000Z" },
-    { "name": "agent-04", "createdAt": "2026-03-25T21:00:00.000Z" },
-    { "name": "digital-marketing-manager", "createdAt": "2026-03-25T21:00:00.000Z" }
+    {
+      "name": "marketing",
+      "createdAt": "2026-03-25T21:00:00.000Z"
+    },
+    {
+      "name": "ai-agents",
+      "createdAt": "2026-03-25T21:00:00.000Z"
+    },
+    {
+      "name": "automation",
+      "createdAt": "2026-03-25T21:00:00.000Z"
+    },
+    {
+      "name": "agent-04",
+      "createdAt": "2026-03-25T21:00:00.000Z"
+    },
+    {
+      "name": "digital-marketing-manager",
+      "createdAt": "2026-03-25T21:00:00.000Z"
+    }
   ],
   "triggerCount": 2,
   "updatedAt": "2026-03-25T21:37:35.915Z",
@@ -1317,8 +1948,20 @@
   "_meta": {
     "agent": "04 – Digital Marketing Manager",
     "role": "Central routing orchestrator. Deploys approved assets to all distribution agents. Runs daily performance optimization loop.",
-    "modes": ["LAUNCH", "OPTIMIZE"],
-    "integrations": ["Google Analytics 4", "Google Ads API", "Meta Ads API", "HubSpot", "Airtable", "Google Sheets", "Slack", "OpenAI GPT-4o"],
+    "modes": [
+      "LAUNCH",
+      "OPTIMIZE"
+    ],
+    "integrations": [
+      "Google Analytics 4",
+      "Google Ads API",
+      "Meta Ads API",
+      "HubSpot",
+      "Airtable",
+      "Google Sheets",
+      "Slack",
+      "OpenAI GPT-4o"
+    ],
     "environment_variables_required": [
       "GA4_PROPERTY_ID",
       "GOOGLE_ADS_CUSTOMER_ID",
