@@ -5,9 +5,7 @@
       "parameters": {
         "httpMethod": "POST",
         "path": "approved-assets",
-        "options": {
-          "responseMode": "responseNode"
-        }
+        "responseMode": "responseNode"
       },
       "id": "trigger-webhook",
       "name": "📥 Webhook – Approved Assets",
@@ -17,7 +15,7 @@
         0,
         200
       ],
-      "webhookId": "dmm-approved-assets"
+      "webhookId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
     },
     {
       "parameters": {
@@ -1944,43 +1942,5 @@
   ],
   "triggerCount": 2,
   "updatedAt": "2026-03-25T21:37:35.915Z",
-  "versionId": "1",
-  "_meta": {
-    "agent": "04 – Digital Marketing Manager",
-    "role": "Central routing orchestrator. Deploys approved assets to all distribution agents. Runs daily performance optimization loop.",
-    "modes": [
-      "LAUNCH",
-      "OPTIMIZE"
-    ],
-    "integrations": [
-      "Google Analytics 4",
-      "Google Ads API",
-      "Meta Ads API",
-      "HubSpot",
-      "Airtable",
-      "Google Sheets",
-      "Slack",
-      "OpenAI GPT-4o"
-    ],
-    "environment_variables_required": [
-      "GA4_PROPERTY_ID",
-      "GOOGLE_ADS_CUSTOMER_ID",
-      "GOOGLE_ADS_DEVELOPER_TOKEN",
-      "META_ADS_ACCOUNT_ID",
-      "AIRTABLE_BASE_ID",
-      "GOOGLE_SHEETS_SPREADSHEET_ID",
-      "SLACK_CHANNEL_CAMPAIGNS",
-      "SLACK_CHANNEL_DESIGN_DIRECTOR"
-    ],
-    "credentials_required": [
-      "googleAnalyticsOAuth2",
-      "googleAdsOAuth2Api",
-      "facebookGraphApi",
-      "hubspotPrivateAppApi",
-      "airtableTokenApi",
-      "googleSheetsOAuth2Api",
-      "slackApi",
-      "openAiApi"
-    ]
-  }
+  "versionId": "1"
 }
