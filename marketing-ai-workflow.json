@@ -1,0 +1,560 @@
+{
+  "name": "Marketing AI Agency – Full Automation Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-001",
+      "name": "📥 Client Brief Input",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 300],
+      "notes": "Start the workflow with the Client Brief, Market Data, and Goals as the initial input."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-001",
+              "name": "clientBrief",
+              "value": "={{ $json.clientBrief ?? 'Default client brief placeholder' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-002",
+              "name": "marketData",
+              "value": "={{ $json.marketData ?? 'Default market data placeholder' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-003",
+              "name": "goals",
+              "value": "={{ $json.goals ?? 'Default goals placeholder' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-001",
+      "name": "🎯 Client Brief + Market Data + Goals",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the STRATEGIST AI Agent in a marketing agency.\n\nYour role: Analyse the Client Brief, Market Data, and Goals provided. Produce a comprehensive Strategy Document.\n\nInput:\n- Client Brief: {{ $json.clientBrief }}\n- Market Data: {{ $json.marketData }}\n- Goals: {{ $json.goals }}\n\nOutput a structured Strategy Document covering:\n1. Situation Analysis\n2. Target Audience Definition\n3. Key Messages\n4. Channel Strategy\n5. KPIs and Success Metrics\n6. Strategic Roadmap",
+        "options": {
+          "systemMessage": "You are a senior marketing strategist. Always output structured, professional strategy documents. Be concise yet comprehensive."
+        }
+      },
+      "id": "agent-001",
+      "name": "🧭 STRATEGIST Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the BRAND MANAGER AI Agent in a marketing agency.\n\nYour role: Using the Strategy Document provided, produce a Brand Brief that defines the brand's positioning, voice, personality, and visual direction.\n\nInput – Strategy Document:\n{{ $json.output }}\n\nOutput a Brand Brief covering:\n1. Brand Positioning Statement\n2. Brand Voice & Tone\n3. Brand Personality Attributes\n4. Visual Identity Direction\n5. Key Differentiators\n6. Brand Promises",
+        "options": {
+          "systemMessage": "You are an experienced brand manager. Produce clear, actionable brand briefs that guide creative teams."
+        }
+      },
+      "id": "agent-002",
+      "name": "🏷️ BRAND MANAGER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the CREATIVE DIRECTOR AI Agent in a marketing agency.\n\nYour role: Review the Brand Brief and produce creative concepts, run them through a Brand Review, then output Approved Creative Assets and Content Briefs.\n\nInput – Brand Brief:\n{{ $json.output }}\n\nOutput:\n1. Creative Concept Options (minimum 3 concepts)\n2. Brand Review Notes (alignment check against brand guidelines)\n3. Approved Creative Assets list\n4. Content Briefs for each approved asset",
+        "options": {
+          "systemMessage": "You are a world-class creative director. Your concepts are bold, on-brand, and strategically aligned. Always validate concepts against brand guidelines before approving."
+        }
+      },
+      "id": "agent-003",
+      "name": "🎨 CREATIVE DIRECTOR Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [940, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the DIGITAL MARKETING MANAGER AI Agent in a marketing agency.\n\nYour role: Using the Approved Creative Assets and Content Briefs from the Creative Director, produce a Campaign Plan, launch Live Campaigns, and generate Performance Reports.\n\nInput – Approved Assets and Content Briefs:\n{{ $json.output }}\n\nOutput:\n1. Campaign Plan (channels, budget allocation, timelines, targeting)\n2. Live Campaign Setup Instructions (platform-by-platform)\n3. Performance Report Template with metrics\n4. Optimisation Recommendations",
+        "options": {
+          "systemMessage": "You are a data-driven digital marketing manager. Your campaigns are ROI-focused, well-structured, and measurable."
+        }
+      },
+      "id": "agent-004",
+      "name": "📣 DIGITAL MARKETING MANAGER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [1180, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-004",
+              "name": "performanceReport",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "field-005",
+              "name": "feedbackForStrategist",
+              "value": "=Performance insights from Digital Marketing Manager feeding back into strategy iteration.",
+              "type": "string"
+            },
+            {
+              "id": "field-006",
+              "name": "feedbackForCreativeDirector",
+              "value": "=Creative performance data feeding back for asset optimisation.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-002",
+      "name": "🔁 Feedback Hub (Performance & Creative Data)",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1420, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the CONTENT MARKETING MANAGER AI Agent in a marketing agency.\n\nYour role: Using the Campaign Strategy and Business Brief from the Feedback Hub, produce a Content Strategy, Editorial Calendar, and individual Content Briefs.\n\nInput – Campaign Strategy / Business Brief:\n{{ $json.performanceReport }}\n\nOutput:\n1. Content Strategy (themes, formats, channels)\n2. Editorial Calendar (12-week plan with topics, formats, publish dates)\n3. Individual Content Briefs (one per planned piece)",
+        "options": {
+          "systemMessage": "You are a strategic content marketing manager. Your content plans are audience-first, SEO-informed, and aligned to business goals."
+        }
+      },
+      "id": "agent-005",
+      "name": "📋 CONTENT MARKETING MANAGER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [1660, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the CONTENT WRITER & COPYWRITER AI Agent in a marketing agency.\n\nYour role: Using the Content Briefs provided, produce Articles, Copy, Scripts, and CTAs.\n\nInput – Content Briefs:\n{{ $json.output }}\n\nOutput:\n1. Long-form Articles (blog posts, thought leadership)\n2. Short-form Copy (social posts, ad copy, headlines)\n3. Video/Podcast Scripts\n4. CTAs (call-to-action variations for each content piece)",
+        "options": {
+          "systemMessage": "You are a versatile content writer and copywriter. Your writing is engaging, on-brand, and conversion-focused."
+        }
+      },
+      "id": "agent-006",
+      "name": "✍️ CONTENT WRITER & COPYWRITER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [1900, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the VISUAL DESIGNER AI Agent in a marketing agency.\n\nYour role: Using the Articles, Copy, and CTAs from the Content Writer, produce detailed briefs and specifications for Infographics, Illustrations, and Data Visualisations.\n\nInput – Content & Copy:\n{{ $json.output }}\n\nOutput:\n1. Infographic Specifications (structure, data points, visual hierarchy)\n2. Illustration Briefs (style, mood, key elements)\n3. Data Visualisation Plans (chart types, datasets, colour coding)",
+        "options": {
+          "systemMessage": "You are a creative visual designer specialising in information design. You translate complex content into compelling visuals."
+        }
+      },
+      "id": "agent-007",
+      "name": "🖼️ VISUAL DESIGNER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [2140, 160]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the VIDEO MARKETING EXECUTIVE AI Agent in a marketing agency.\n\nYour role: Using the Scripts and CTAs from the Content Writer, produce production briefs for Social Videos, Explainer Videos, and Brand Films.\n\nInput – Scripts & CTAs:\n{{ $json.output }}\n\nOutput:\n1. Social Video Briefs (platform specs, duration, hook, CTA)\n2. Explainer Video Storyboards\n3. Brand Film Treatment Documents",
+        "options": {
+          "systemMessage": "You are a video marketing executive with expertise in storytelling, platform-native video, and brand film production."
+        }
+      },
+      "id": "agent-008",
+      "name": "🎬 VIDEO MARKETING EXECUTIVE Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [2140, 460]
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "query": "SELECT * FROM input1 CROSS JOIN input2"
+      },
+      "id": "merge-001",
+      "name": "🔀 Merge Visual + Video Assets",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [2380, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the MARKETING DESIGNER AI Agent in a marketing agency.\n\nYour role: Using the visual assets specifications and video briefs, produce Ads, Emails, Campaign Assets, and Landing Page Layouts.\n\nInput – Visual & Video Asset Briefs:\n{{ JSON.stringify($json) }}\n\nOutput:\n1. Ad Creatives (static, animated, rich media specs)\n2. Email Templates (header, body, footer layouts)\n3. Campaign Asset Library (banners, social tiles, display ads)\n4. Landing Page Wireframes and Layout Guides",
+        "options": {
+          "systemMessage": "You are a skilled marketing designer. You create visually stunning, conversion-optimised marketing collateral that respects brand guidelines."
+        }
+      },
+      "id": "agent-009",
+      "name": "🖥️ MARKETING DESIGNER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [2620, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the UI & UX DESIGNER AI Agent in a marketing agency.\n\nYour role: Using the Campaign Assets and Landing Page Layouts from the Marketing Designer, produce User Flows, Wireframes, and Conversion-Optimised Page Designs.\n\nInput – Marketing Designer Outputs:\n{{ $json.output }}\n\nOutput:\n1. User Flow Diagrams (journey maps for each campaign)\n2. Detailed Wireframes (annotated, responsive)\n3. Conversion Optimisation Recommendations\n4. A/B Testing Variants",
+        "options": {
+          "systemMessage": "You are a UX-focused digital designer. You balance aesthetic quality with conversion optimisation and user-centred design principles."
+        }
+      },
+      "id": "agent-010",
+      "name": "🧩 UI & UX DESIGNER Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [2860, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-007",
+              "name": "uxDesignerOutput",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "field-008",
+              "name": "distributionChannel",
+              "value": "=Routing to Digital Marketing Manager for distribution and performance tracking.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-003",
+      "name": "🚀 Distribution via Digital Marketing Manager",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [3100, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-009",
+              "name": "performanceData",
+              "value": "={{ $json.uxDesignerOutput }}",
+              "type": "string"
+            },
+            {
+              "id": "field-010",
+              "name": "feedbackLoop",
+              "value": "=Performance data feeding back to Content Marketing Manager and Strategist for continuous improvement.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-004",
+      "name": "📊 Performance Data Feedback Loop",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [3340, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the DESIGN DIRECTOR AI Agent in a marketing agency.\n\nYour role: You receive the Content Brief + Strategic Direction alongside Brand Guidelines from the Creative Director. You oversee and direct the Marketing Designer and UI & UX Designer outputs, ensuring everything meets brand and quality standards.\n\nInput – Performance Data & Strategic Direction:\n{{ $json.performanceData }}\n\nOutput:\n1. Design Direction Brief (for Marketing Designer and UI/UX Designer)\n2. Brand Compliance Review\n3. Quality Standards Checklist\n4. Revision Requests (if any)\n5. Final Approval Decision",
+        "options": {
+          "systemMessage": "You are a meticulous Design Director. You uphold brand integrity, champion design excellence, and ensure every asset is approved before distribution."
+        }
+      },
+      "id": "agent-011",
+      "name": "🎯 DESIGN DIRECTOR Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [3580, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the MARKETING DESIGNER AI Agent (Design Director Track) in a marketing agency.\n\nYour role: Following the Design Director's brief and direction, produce the final Campaign Assets.\n\nInput – Design Director Brief:\n{{ $json.output }}\n\nOutput:\n1. Final Campaign Asset Pack (all formats)\n2. Asset Naming Convention Guide\n3. Delivery Checklist",
+        "options": {
+          "systemMessage": "You are a production-ready marketing designer. You deliver pixel-perfect assets on time, to spec, and on brand."
+        }
+      },
+      "id": "agent-012",
+      "name": "🖥️ MARKETING DESIGNER Agent (Design Track)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [3820, 160]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the UI & UX DESIGNER AI Agent (Design Director Track) in a marketing agency.\n\nYour role: Following the Design Director's brief and direction, produce the final Landing Pages and User Flows.\n\nInput – Design Director Brief:\n{{ $json.output }}\n\nOutput:\n1. Final Landing Page Designs (desktop and mobile)\n2. Interaction Flow Documentation\n3. Developer Handoff Notes",
+        "options": {
+          "systemMessage": "You are a detail-oriented UI/UX designer. Your final deliverables are developer-ready and conversion-optimised."
+        }
+      },
+      "id": "agent-013",
+      "name": "🧩 UI & UX DESIGNER Agent (Design Track)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [3820, 460]
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "query": "SELECT * FROM input1 CROSS JOIN input2"
+      },
+      "id": "merge-002",
+      "name": "🔀 Merge Final Design Assets",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [4060, 300]
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "=You are the DESIGN DIRECTOR AI Agent conducting the Final Review.\n\nYour role: Review all final assets from the Marketing Designer and UI/UX Designer (Design Track). Approve or request revisions.\n\nInput – Final Design Assets:\n{{ JSON.stringify($json) }}\n\nOutput:\n1. Final Review Report\n2. Approval Status: APPROVED / REVISION REQUIRED\n3. If approved: Distribution Clearance Certificate\n4. If revision required: Specific revision notes per asset",
+        "options": {
+          "systemMessage": "You are a rigorous Design Director conducting final sign-off. Only approve assets that meet 100% of brand, quality, and strategic requirements."
+        }
+      },
+      "id": "agent-014",
+      "name": "✅ DESIGN DIRECTOR Final Review",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [4300, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-011",
+              "name": "approvalStatus",
+              "value": "=APPROVED FOR DISTRIBUTION",
+              "type": "string"
+            },
+            {
+              "id": "field-012",
+              "name": "finalOutput",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "field-013",
+              "name": "timestamp",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-005",
+      "name": "🚀 Approved for Distribution",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [4540, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "llm-001",
+      "name": "🤖 OpenAI GPT-4o",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [460, 500],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "📥 Client Brief Input": {
+      "main": [
+        [{ "node": "🎯 Client Brief + Market Data + Goals", "type": "main", "index": 0 }]
+      ]
+    },
+    "🎯 Client Brief + Market Data + Goals": {
+      "main": [
+        [{ "node": "🧭 STRATEGIST Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🧭 STRATEGIST Agent": {
+      "main": [
+        [{ "node": "🏷️ BRAND MANAGER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🏷️ BRAND MANAGER Agent": {
+      "main": [
+        [{ "node": "🎨 CREATIVE DIRECTOR Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🎨 CREATIVE DIRECTOR Agent": {
+      "main": [
+        [{ "node": "📣 DIGITAL MARKETING MANAGER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "📣 DIGITAL MARKETING MANAGER Agent": {
+      "main": [
+        [{ "node": "🔁 Feedback Hub (Performance & Creative Data)", "type": "main", "index": 0 }]
+      ]
+    },
+    "🔁 Feedback Hub (Performance & Creative Data)": {
+      "main": [
+        [{ "node": "📋 CONTENT MARKETING MANAGER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "📋 CONTENT MARKETING MANAGER Agent": {
+      "main": [
+        [{ "node": "✍️ CONTENT WRITER & COPYWRITER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "✍️ CONTENT WRITER & COPYWRITER Agent": {
+      "main": [
+        [
+          { "node": "🖼️ VISUAL DESIGNER Agent", "type": "main", "index": 0 },
+          { "node": "🎬 VIDEO MARKETING EXECUTIVE Agent", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "🖼️ VISUAL DESIGNER Agent": {
+      "main": [
+        [{ "node": "🔀 Merge Visual + Video Assets", "type": "main", "index": 0 }]
+      ]
+    },
+    "🎬 VIDEO MARKETING EXECUTIVE Agent": {
+      "main": [
+        [{ "node": "🔀 Merge Visual + Video Assets", "type": "main", "index": 1 }]
+      ]
+    },
+    "🔀 Merge Visual + Video Assets": {
+      "main": [
+        [{ "node": "🖥️ MARKETING DESIGNER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🖥️ MARKETING DESIGNER Agent": {
+      "main": [
+        [{ "node": "🧩 UI & UX DESIGNER Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🧩 UI & UX DESIGNER Agent": {
+      "main": [
+        [{ "node": "🚀 Distribution via Digital Marketing Manager", "type": "main", "index": 0 }]
+      ]
+    },
+    "🚀 Distribution via Digital Marketing Manager": {
+      "main": [
+        [{ "node": "📊 Performance Data Feedback Loop", "type": "main", "index": 0 }]
+      ]
+    },
+    "📊 Performance Data Feedback Loop": {
+      "main": [
+        [{ "node": "🎯 DESIGN DIRECTOR Agent", "type": "main", "index": 0 }]
+      ]
+    },
+    "🎯 DESIGN DIRECTOR Agent": {
+      "main": [
+        [
+          { "node": "🖥️ MARKETING DESIGNER Agent (Design Track)", "type": "main", "index": 0 },
+          { "node": "🧩 UI & UX DESIGNER Agent (Design Track)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "🖥️ MARKETING DESIGNER Agent (Design Track)": {
+      "main": [
+        [{ "node": "🔀 Merge Final Design Assets", "type": "main", "index": 0 }]
+      ]
+    },
+    "🧩 UI & UX DESIGNER Agent (Design Track)": {
+      "main": [
+        [{ "node": "🔀 Merge Final Design Assets", "type": "main", "index": 1 }]
+      ]
+    },
+    "🔀 Merge Final Design Assets": {
+      "main": [
+        [{ "node": "✅ DESIGN DIRECTOR Final Review", "type": "main", "index": 0 }]
+      ]
+    },
+    "✅ DESIGN DIRECTOR Final Review": {
+      "main": [
+        [{ "node": "🚀 Approved for Distribution", "type": "main", "index": 0 }]
+      ]
+    },
+    "🤖 OpenAI GPT-4o": {
+      "ai_languageModel": [
+        [
+          { "node": "🧭 STRATEGIST Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🏷️ BRAND MANAGER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🎨 CREATIVE DIRECTOR Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "📣 DIGITAL MARKETING MANAGER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "📋 CONTENT MARKETING MANAGER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "✍️ CONTENT WRITER & COPYWRITER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🖼️ VISUAL DESIGNER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🎬 VIDEO MARKETING EXECUTIVE Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🖥️ MARKETING DESIGNER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🧩 UI & UX DESIGNER Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🎯 DESIGN DIRECTOR Agent", "type": "ai_languageModel", "index": 0 },
+          { "node": "🖥️ MARKETING DESIGNER Agent (Design Track)", "type": "ai_languageModel", "index": 0 },
+          { "node": "🧩 UI & UX DESIGNER Agent (Design Track)", "type": "ai_languageModel", "index": 0 },
+          { "node": "✅ DESIGN DIRECTOR Final Review", "type": "ai_languageModel", "index": 0 }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [
+    { "name": "marketing", "createdAt": "2026-03-24T21:00:00.000Z" },
+    { "name": "ai-agents", "createdAt": "2026-03-24T21:00:00.000Z" },
+    { "name": "automation", "createdAt": "2026-03-24T21:00:00.000Z" }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-03-24T21:31:29.541Z",
+  "versionId": "1"
+}
